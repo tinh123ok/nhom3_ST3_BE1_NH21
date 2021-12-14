@@ -1,0 +1,290 @@
+<?php
+require "config.php";
+require "models/db.php";
+require "models/product.php";
+$product = new Product;
+$url = $_SERVER['PHP_SELF'] . '?';
+if (isset($_GET['email'])) {
+	echo '<html><script>alert("Các hot deal sẽ được gỡi về email bạn hằn tuần...");</script></html>';
+	header("Refresh:0; $url");
+}
+if (isset($_GET['ok'])) {
+	echo '<html><script>alert("Đặt hàng thành công<br>Cảm ơn quý khách");</script></html>';
+	unset($_SESSION['giohang']);
+	header('location:index.php');
+}
+session_start();
+$array = $product->getAllProducts();
+include "header.php";
+?>
+<!-- /HEADER -->
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+	<!-- container -->
+	<div class="container">
+		<!-- responsive-nav -->
+		<div id="responsive-nav">
+			<!-- NAV -->
+			<ul class="main-nav nav navbar-nav">
+				<li class="active"><a href="#">Home</a></li>
+				<?php foreach ($product->getAllmenu() as $value) {
+				?>
+					<li>
+						<a href="store.php?manu_id=<?php echo $value['manu_id'] ?>"><?php echo $value['manu_name'] ?></a>
+					</li>
+				<?php } ?>
+			</ul>
+			<!-- /NAV -->
+		</div>
+		<!-- /responsive-nav -->
+	</div>
+	<!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+
+<!-- BREADCRUMB -->
+<div id="breadcrumb" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<h3 class="breadcrumb-header">Checkout</h3>
+				<ul class="breadcrumb-tree">
+					<li><a href="index.php">Home</a></li>
+					<li class="active">Checkout</li>
+				</ul>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /BREADCRUMB -->
+
+<!-- SECTION -->
+<div class="section">
+	<!-- container -->
+	<form action="" id="form" method="post">
+
+		<div class="container">
+			<!-- row -->
+			<div class="row">
+
+				<div class="col-md-7">
+					<!-- Billing Details -->
+					<div class="billing-details">
+						<div class="section-title">
+							<h3 class="title">Billing address</h3>
+						</div>
+						<div class="form-group">
+							<input class="input" type="text" name="first-name" placeholder="First Name" required>
+						</div>
+						<div class="form-group">
+							<input class="input" type="text" name="last-name" placeholder="Last Name"required>
+						</div>
+						<div class="form-group">
+							<input class="input" type="email" name="email" placeholder="Email"required>
+						</div>
+						<div class="form-group">
+							<input class="input" type="text" name="address" placeholder="Address"required>
+						</div>
+						<div class="form-group">
+							<input class="input" type="text" name="city" placeholder="City"required>
+						</div>
+						<div class="form-group">
+							<input class="input" type="text" name="country" placeholder="Country"required>
+						</div>
+						<div class="form-group">
+							<input class="input" type="text" name="zip-code" placeholder="ZIP Code"required>
+						</div>
+						<div class="form-group">
+							<input class="input" type="tel" name="tel" placeholder="Telephone"required>
+						</div>
+						<div class="form-group">
+							<div class="input-checkbox">
+								<input type="checkbox" id="create-account">
+								<label for="create-account">
+									<span></span>
+									Create Account?
+								</label>
+								<div class="caption">
+									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
+									<input class="input" type="password" name="password" placeholder="Enter Your Password">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Billing Details -->
+
+					<!-- Shiping Details -->
+					<div class="shiping-details">
+						<div class="section-title">
+							<h3 class="title">Shiping address</h3>
+						</div>
+						<div class="input-checkbox">
+							<input type="checkbox" id="shiping-address">
+							<label for="shiping-address">
+								<span></span>
+								Ship to a diffrent address?
+							</label>
+							<div class="caption">
+								<div class="form-group">
+									<input class="input" type="text" name="first-name" placeholder="First Name">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="last-name" placeholder="Last Name">
+								</div>
+								<div class="form-group">
+									<input class="input" type="email" name="email" placeholder="Email">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="address" placeholder="Address">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="city" placeholder="City">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="country" placeholder="Country">
+								</div>
+								<div class="form-group">
+									<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
+								</div>
+								<div class="form-group">
+									<input class="input" type="tel" name="tel" placeholder="Telephone">
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- /Shiping Details -->
+
+					<!-- Order notes -->
+					<div class="order-notes">
+						<textarea class="input" placeholder="Order Notes"></textarea>
+					</div>
+					<!-- /Order notes -->
+				</div>
+
+				<!-- Order Details -->
+				<div class="col-md-5 order-details">
+					<div class="section-title text-center">
+						<h3 class="title">Your Order</h3>
+					</div>
+					<div class="order-summary">
+						<div class="order-col">
+							<div><strong>PRODUCT</strong></div>
+							<div><strong>TOTAL</strong></div>
+						</div>
+						<div class="order-products">
+							<?php $tong = 0;
+							for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
+								$value = $product->getProductById($_SESSION['giohang'][$i][0])[0];
+								$tong += $value['price'] * $_SESSION['giohang'][$i][1];
+							?>
+
+								<div class="order-col">
+									<div><?php echo $_SESSION['giohang'][$i][1] . 'x' . $value['Name'] ?></div>
+									<div><?php echo number_format($value['price']) ?>đ</div>
+								</div>
+							<?php } ?>
+						</div>
+						<div class="order-col">
+							<div>Shiping</div>
+							<div><strong>FREE</strong></div>
+						</div>
+						<div class="order-col">
+							<div><strong>TOTAL</strong></div>
+							<div><strong class="order-total"><?php echo number_format($tong) ?>đ</strong></div>
+						</div>
+					</div>
+					<div class="payment-method">
+						<div class="input-radio">
+							<input type="radio" name="payment" id="payment-1">
+							<label for="payment-1">
+								<span></span>
+								Direct Bank Transfer
+							</label>
+							<div class="caption">
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+							</div>
+						</div>
+						<div class="input-radio">
+							<input type="radio" name="payment" id="payment-2">
+							<label for="payment-2">
+								<span></span>
+								Cheque Payment
+							</label>
+							<div class="caption">
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+							</div>
+						</div>
+						<div class="input-radio">
+							<input type="radio" name="payment" id="payment-3">
+							<label for="payment-3">
+								<span></span>
+								Paypal System
+							</label>
+							<div class="caption">
+								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+							</div>
+						</div>
+					</div>
+					<div class="input-checkbox">
+						<input type="checkbox" id="terms">
+						<label for="terms">
+							<span></span>
+							I've read and accept the <a href="#">terms & conditions</a>
+						</label>
+					</div>
+					<input type="hidden" name="thaotac" value="ok">
+					<a href="<?php echo $url.'&ok'?>" class="primary-btn order-submit">Place order</a>
+				</div>
+				<!-- /Order Details -->
+			</div>
+			<!-- /row -->
+		</div>
+	</form>
+
+	<!-- /container -->
+</div>
+<!-- /SECTION -->
+
+<!-- NEWSLETTER -->
+<div id="newsletter" class="section">
+	<!-- container -->
+	<div class="container">
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<div class="newsletter">
+					<p>Sign Up for the <strong>NEWSLETTER</strong></p>
+					<form>
+						<input class="input" type="email" name="email" placeholder="Enter Your Email" required>
+						<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+					</form>
+					<ul class="newsletter-follow">
+						<li>
+							<a href="#"><i class="fa fa-facebook"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-twitter"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-instagram"></i></a>
+						</li>
+						<li>
+							<a href="#"><i class="fa fa-pinterest"></i></a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<!-- /row -->
+	</div>
+	<!-- /container -->
+</div>
+<!-- /NEWSLETTER -->
+
+<!-- FOOTER -->
+<?php include "footer.php"; ?>
