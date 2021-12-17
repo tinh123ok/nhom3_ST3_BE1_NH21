@@ -50,7 +50,7 @@ $tong = 0;
             font-weight: 700;
             -webkit-transition: 0.2s all;
             transition: 0.2s all;
-            border-radius: 10px;
+            border-radius: 25px;
         }
     </style>
 </head>

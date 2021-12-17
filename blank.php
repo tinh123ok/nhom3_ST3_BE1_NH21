@@ -24,9 +24,19 @@ if (isset($_GET['delete'])) {
 		break;
 	}
 }
+if (isset($_POST['soluong']) && isset($_POST['id'])) {
+	for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
+		if ($_SESSION['giohang'][$i][0] == $_POST['id']) {
+			$_SESSION['giohang'][$i][1] = $_POST['soluong'];
+			break;
+		}
+	}
+}
 $array = $product->getAllProducts();
 $getallmenu = $product->getAllmenu();
-$bill = $user->getbillbybill_id($bill_id)[0];
+if ($bill_id != -1) {
+	$bill = $user->getbillbybill_id($bill_id)[0];
+}
 include "header.php"
 ?>
 <!-- NAVIGATION -->
@@ -75,61 +85,66 @@ include "header.php"
 <!-- /BREADCRUMB -->
 <?php if ($bill_id == -1) { ?>
 	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row tb" style="font-size: 18px;font-weight:bold;padding: 10px 0px;">
-				<div class="col-md-2 col-xs-6">
-					Ảnh đại diện
-				</div>
-				<div class="col-md-3 col-xs-6">
-					Sản Phẩm
-				</div>
-				<div class="col-md-2 col-xs-6">
-					Giá
-				</div>
-				<div class="col-md-2 col-xs-6">
-					Số lượng
-				</div>
-				<div class="col-md-2 col-xs-6">
-					Thao tác
-				</div>
-			</div>
-			<?php for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
-				$value = $product->getProductById($_SESSION['giohang'][$i][0])[0];
-			?>
-				<div class="row tb" style="padding-top: 7px;">
-					<div class="col-md-2 col-xs-6 ">
-						<img src="./images/<?php echo $value['image'] ?>" width="100px" height="100px">
+	<form id="form" action="" method="post">
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row tb" style="font-size: 18px;font-weight:bold;padding: 10px 0px;">
+					<div class="col-md-2 col-xs-6">
+						Ảnh đại diện
 					</div>
-					<div class="col-md-3 col-xs-6 ">
-						<?php echo $value['Name'] ?>
-					</div>
-					<div class="col-md-2 col-xs-6 ">
-						<?php echo number_format($value['price']) . "đ" ?>
+					<div class="col-md-3 col-xs-6">
+						Sản Phẩm
 					</div>
 					<div class="col-md-2 col-xs-6">
-						<div style="width: 100px;">
-							<input value="<?php echo $_SESSION['giohang'][$i][1] ?>" type="number" style="width: 100%;" placeholder="number" id="numPeople" />
+						Giá
+					</div>
+					<div class="col-md-2 col-xs-6">
+						Số lượng
+					</div>
+					<div class="col-md-2 col-xs-6">
+						Thao tác
+					</div>
+				</div>
+				<?php for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
+					$value = $product->getProductById($_SESSION['giohang'][$i][0])[0];
+				?>
+					<div class="row tb" style="padding-top: 7px;">
+						<div class="col-md-2 col-xs-6 ">
+							<img src="./images/<?php echo $value['image'] ?>" width="100px" height="100px">
+						</div>
+						<div class="col-md-3 col-xs-6 ">
+							<?php echo $value['Name'] ?>
+						</div>
+						<div class="col-md-2 col-xs-6 ">
+							<?php echo number_format($value['price']) . "đ" ?>
+						</div>
+						<div class="col-md-2 col-xs-6">
+							<div style="width: 100px;">
+								<input type="hidden" name="id" value="<?php echo $_SESSION['giohang'][$i][0] ?>">
+								<input name="soluong" onchange="$('#form').submit();" value="<?php echo $_SESSION['giohang'][$i][1] ?>" type="number" style="width: 100%;" placeholder="number" id="numPeople" />
+							</div>
+						</div>
+						<div style="padding-left: 30px;" class="col-md-2 col-xs-6 ">
+							<div class="order-submit" style="margin-left: -30px;">
+								<input class="primary-btn" name="Place_order" type="submit" value="Delete">
+							</div>
 						</div>
 					</div>
-					<div style="padding-left: 30px;" class="col-md-2 col-xs-6 ">
-						<input type="submit" value=" Xóa ">
+					<!-- /row -->
+				<?php } ?>
+				<div class="row tb tt">
+					<div class="col-md-5 col-xs-6"></div>
+					<h4 class="col-md-2 col-xs-6" style="vertical-align: text-bottom;">Tổng Tiền:</h4>
+					<div class="col-md-2 col-xs-6" style="font-size: 18px;font-weight:bold"><?php echo number_format($tong) . "đ" ?></div>
+					<div class="col-md-2 col-xs-6 cart-btns1" style="margin-left: -10px;"> <a href="checkout.php">Checkout <i class="fa fa-arrow-circle-right"></i></a>
 					</div>
 				</div>
-				<!-- /row -->
-			<?php } ?>
-			<div class="row tb tt">
-				<div class="col-md-5 col-xs-6"></div>
-				<h4 class="col-md-2 col-xs-6" style="vertical-align: text-bottom;">Tổng Tiền:</h4>
-				<div class="col-md-2 col-xs-6" style="font-size: 18px;font-weight:bold"><?php echo number_format($tong) . "đ" ?></div>
-				<div class="col-md-2 col-xs-6 cart-btns1"> <a href="checkout.php">Checkout <i class="fa fa-arrow-circle-right"></i></a>
-				</div>
 			</div>
+			<!-- /container -->
 		</div>
-		<!-- /container -->
-	</div>
+	</form>
 	<!-- /SECTION -->
 <?php } else {
 ?>
@@ -140,16 +155,16 @@ include "header.php"
 			<!-- row -->
 			<div class="row" style="margin-bottom: 30px;font-size: 18px;font-weight:bold;padding: 10px 0px;">
 				<div class="col-md-2 col-xs-6">
-					Bill ID: <?php echo $bill['bill_id']?>
+					Bill ID: <?php echo $bill['bill_id'] ?>
 				</div>
 				<div class="col-md-3 col-xs-6">
-					Full Name: <?php echo $bill['fullname']?>
+					Full Name: <?php echo $bill['fullname'] ?>
 				</div>
 				<div class="col-md-4 col-xs-6">
-					Address: <?php echo $bill['address']?>
+					Address: <?php echo $bill['address'] ?>
 				</div>
 				<div class="col-md-2 col-xs-6">
-					Phone: <?php echo $bill['phone']?>
+					Phone: <?php echo $bill['phone'] ?>
 				</div>
 			</div>
 			<div class="row tb" style="font-size: 18px;font-weight:bold;padding: 10px 0px;">
