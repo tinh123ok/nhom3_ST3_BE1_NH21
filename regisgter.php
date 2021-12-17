@@ -2,30 +2,21 @@
 session_start();
 require "./config.php";
 require "./models/db.php";
-require "./models/admin.php";
 require "./models/user.php";
 $user = new user;
-$admin = new admin;
-$url = $_SERVER['PHP_SELF'];
-if(isset($_GET['forgotpassword'])){
-    echo '<html><script>alert("Soạn cú pháp: resetpassword + _ + Registered phone number gỡi 1234");</script></html>'; 
-    header("Refresh:0; $url");
-}
-if (isset($_POST['submit'])) {
-    $accountname = $_POST['accountname'];
+if (isset($_POST['submit_create'])) {
+    $fullname = $_POST['fullname'];
+    $phone = $_POST['phone'];
+    $username = $_POST['username'];
     $password = $_POST['password'];
-    if ($admin->checkLogin($accountname, $password)) {
-        $_SESSION['admin'] = $accountname;
-        header('location:./Admin/index.php');
+    if ($user->checkregisgter($username)) {
+        $user->createuser($fullname, $phone, $username, $password);
+        header('location:login.php');
     } else {
-        if ($user->checkLogin($accountname, $password)) {
-            $_SESSION['user'] = $accountname;
-            header('location:index.php'); 
-        } else {
-            echo '<html><script>alert("Tk/MK sai");</script></html>';
-        }
+        echo '<html><script>alert("username đã tồn tại");</script></html>';
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -43,8 +34,8 @@ if (isset($_POST['submit'])) {
     <div class="page">
         <div class="container">
             <div class="left">
-                <div class="login">Login</div>
-                <div class="eula">By logging in you agree to the ridiculously long terms that you didn't bother to read</div>
+                <div class="login">Sign up</div>
+                <div class="eula">Register now for our award-winning service and get a 14 day free trial.</div>
             </div>
             <div class="right">
                 <svg viewBox="0 0 320 300">
@@ -54,21 +45,18 @@ if (isset($_POST['submit'])) {
                             <stop style="stop-color:#ff0000;" offset="1" id="stop878" />
                         </linearGradient>
                     </defs>
-                    <path d="m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143" />
                 </svg>
-                <div class="form">
+                <div class="form" style="margin-top: 10px;">
                     <form action="#" method="post">
-                        <label for="username">Username</label>
-                        <input name="accountname" type="text" id="">
-                        <label for="password">Password</label>
-                        <input name="password" type="password" id="password">
-                        <input style="color: white;margin-top: 20px;" name="submit" type="submit" id="submit" value="Submit">
-                        <div style="margin-top: 20px;">
-                            <a style="color: white;text-decoration: none;" href="regisgter.php">Regisgter</a>
-                        </div>
-                        <div style="float: right; margin-top: -20px;">
-                            <a style="color: white;text-decoration: none;" href="login.php?forgotpassword=true">Forgot password</a>
-                        </div>
+                        <label style="margin-top: 10px;" for="username">Username</label>
+                        <input name="username" type="text" id="" required>
+                        <label style="margin-top:2px;" for="username">Full Name</label>
+                        <input name="fullname" type="text" id="" required>
+                        <label style="margin-top:2px;" for="username">Phone</label>
+                        <input name="phone" type="text" id="" required>
+                        <label style="margin-top:2px;" for="password">Password</label>
+                        <input name="password" type="password" id="password" required>
+                        <input style="color: white;margin-top: 20px;" name="submit_create" type="submit" id="submit" value="Sign up">
                     </form>
                 </div>
             </div>

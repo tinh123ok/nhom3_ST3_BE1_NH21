@@ -438,8 +438,8 @@ include "header.php";
 				</div>
 			</div>
 
-			<?php for ($i = 0; $i < sizeof($product->getProductBymenuid($theproduct['manu_id'])); $i++) {
-				$value = $product->getProductBymenuid($theproduct['manu_id'])[$i]; ?>
+			<?php for ($i = 0; $i < sizeof($product->getProductBytypeid($theproduct['type_id'])) && $i<4; $i++) {
+				$value = $product->getProductBytypeid($theproduct['type_id'])[$i]; ?>
 				<!-- product -->
 				<div class="col-md-3 col-xs-6">
 					<div class="product">

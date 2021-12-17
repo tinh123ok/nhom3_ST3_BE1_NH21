@@ -1,4 +1,7 @@
+<?php
 
+$tong = 0;
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,13 +22,10 @@
     <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="css/slick.css" />
     <link type="text/css" rel="stylesheet" href="css/slick-theme.css" />
-
     <!-- nouislider -->
     <link type="text/css" rel="stylesheet" href="css/nouislider.min.css" />
-
     <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="css/font-awesome.min.css">
-
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="css/style.css" />
 
@@ -35,7 +35,24 @@
 		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+    <style>
+        .tb {
+            border: 1px solid black;
+        }
 
+        .cart-btns1>a {
+            display: inline-block;
+            width: calc(70% - 0px);
+            padding: 12px;
+            background-color: #D10024;
+            color: #FFF;
+            text-align: center;
+            font-weight: 700;
+            -webkit-transition: 0.2s all;
+            transition: 0.2s all;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -50,8 +67,17 @@
                     <li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
                 </ul>
                 <ul class="header-links pull-right">
+                    <?php if (isset($_SESSION['user'])) { ?>
+                        <li><a href="bill.php"><i class="fa fa-dollar"></i> Bill </a></li>
+                    <?php } ?>
                     <li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-                    <li><a href="login.php"><i class="fa fa-user-o"></i> My Account</a></li>
+                    <?php if (!isset($_SESSION['user'])) { ?>
+                        <li><a href="login.php"><i class="fa fa-user-o"></i> My Account</a></li>
+                    <?php } else {
+                    ?>
+                        <li><a href="logout.php?user=1"><i class="fa fa-user-o"></i>Logout</a></li>
+                    <?php
+                    } ?>
                 </ul>
             </div>
         </div>
@@ -110,7 +136,6 @@
                                 <div class="cart-dropdown">
                                     <div class="cart-list">
                                         <?php
-                                        $tong = 0;
                                         for ($j = 0; $j < sizeof($_SESSION['giohang']); $j++) {
                                             for ($i = 0; $i < sizeof($array); $i++) {
                                                 if ($array[$i]['ID'] == $_SESSION['giohang'][$j][0]) {
@@ -138,10 +163,12 @@
                                         <small><?php echo sizeof($_SESSION['giohang']) ?> Item(s) selected</small>
                                         <h5>SUBTOTAL: <?php echo number_format($tong) ?></h5>
                                     </div>
-                                    <div class="cart-btns">
-                                        <a href="#">View Cart</a>
-                                        <a href="checkout.php">Checkout <i class="fa fa-arrow-circle-right"></i></a>
-                                    </div>
+                                    <?php if (sizeof($_SESSION['giohang']) > 0) { ?>
+                                        <div class="cart-btns">
+                                            <a href="blank.php">View Cart</a>
+                                            <a href="checkout.php">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <!-- /Cart -->

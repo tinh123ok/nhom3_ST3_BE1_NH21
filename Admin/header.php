@@ -1,7 +1,11 @@
 <?php
+session_start();
+if (!isset($_SESSION['admin'])) {
+  header('location:../login.php');
+}
 require "config.php";
-require "models/db.php";
-require "models/product.php";
+require "./models/db.php";
+require "./models/product.php";
 $product = new Product;
 function active($sp)
 {
@@ -223,7 +227,7 @@ function menu_open($sp)
               </ul>
             </li>
             <li class="nav-item">
-              <a href="../logout.php" class="nav-link">
+              <a href="../logout.php?admin=1" class="nav-link">
                 <i class="nav-icon far fa-circle text-danger"></i>
                 <p>
                   Log Out
@@ -234,7 +238,7 @@ function menu_open($sp)
 
 
 
-            
+
 
           </ul>
         </nav>

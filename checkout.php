@@ -2,18 +2,38 @@
 require "config.php";
 require "models/db.php";
 require "models/product.php";
+require "models/user.php";
+$user = new user;
 $product = new Product;
 $url = $_SERVER['PHP_SELF'] . '?';
+session_start();
+if (sizeof($_SESSION['giohang']) <= 0) {
+	header('location:index.php');
+}
 if (isset($_GET['email'])) {
 	echo '<html><script>alert("Các hot deal sẽ được gỡi về email bạn hằn tuần...");</script></html>';
 	header("Refresh:0; $url");
 }
-if (isset($_GET['ok'])) {
-	echo '<html><script>alert("Đặt hàng thành công<br>Cảm ơn quý khách");</script></html>';
+if (isset($_POST['Place_order']) && isset($_SESSION['user'])) {
+	$name = $_POST['last-name'] . $_POST['first-name'];
+	$address = $_POST['address'] . "-" . $_POST['city'] . "-" . $_POST['country'] . "-" . "(" . $_POST['zip-code'] . ")";
+	$phone = $_POST['tel'];
+	$ordernotes = $_POST['ordernotes'];
+	$Barcode = $user->random_Barcode($user);
+	$user->createbill($Barcode, $name, $_SESSION['user'], $address, $phone, $ordernotes);
+	$bill_id = $user->getbill_id($Barcode);
+	for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
+		$user->addbill($bill_id, $_SESSION['giohang'][$i][0], $_SESSION['giohang'][$i][1]);
+	}
 	unset($_SESSION['giohang']);
-	header('location:index.php');
+	echo '<html><script>alert("Order Success. Orders will be delivered in the next 3-4 days");</script></html>';
+	header("Refresh:0; index.php");
+} else {
+	if (isset($_POST['Place_order'])) {
+		echo '<html><script>alert("Order Success. Orders will be delivered in the next 3-4 days");</script></html>';
+		header("Refresh:0; index.php");
+	}
 }
-session_start();
 $array = $product->getAllProducts();
 include "header.php";
 ?>
@@ -76,92 +96,39 @@ include "header.php";
 					<!-- Billing Details -->
 					<div class="billing-details">
 						<div class="section-title">
-							<h3 class="title">Billing address</h3>
+							<h3 class="title">order Information</h3>
 						</div>
 						<div class="form-group">
 							<input class="input" type="text" name="first-name" placeholder="First Name" required>
 						</div>
 						<div class="form-group">
-							<input class="input" type="text" name="last-name" placeholder="Last Name"required>
+							<input class="input" type="text" name="last-name" placeholder="Last Name" required>
 						</div>
 						<div class="form-group">
-							<input class="input" type="email" name="email" placeholder="Email"required>
+							<input class="input" type="email" name="email" placeholder="Email" required>
 						</div>
 						<div class="form-group">
-							<input class="input" type="text" name="address" placeholder="Address"required>
+							<input class="input" type="text" name="address" placeholder="Address" required>
 						</div>
 						<div class="form-group">
-							<input class="input" type="text" name="city" placeholder="City"required>
+							<input class="input" type="text" name="city" placeholder="City" required>
 						</div>
 						<div class="form-group">
-							<input class="input" type="text" name="country" placeholder="Country"required>
+							<input class="input" type="text" name="country" placeholder="Country" required>
 						</div>
 						<div class="form-group">
-							<input class="input" type="text" name="zip-code" placeholder="ZIP Code"required>
+							<input class="input" type="text" name="zip-code" placeholder="ZIP Code" required>
 						</div>
 						<div class="form-group">
-							<input class="input" type="tel" name="tel" placeholder="Telephone"required>
+							<input class="input" type="tel" name="tel" placeholder="Telephone" required>
 						</div>
-						<div class="form-group">
-							<div class="input-checkbox">
-								<input type="checkbox" id="create-account">
-								<label for="create-account">
-									<span></span>
-									Create Account?
-								</label>
-								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
-									<input class="input" type="password" name="password" placeholder="Enter Your Password">
-								</div>
-							</div>
-						</div>
+
 					</div>
 					<!-- /Billing Details -->
 
-					<!-- Shiping Details -->
-					<div class="shiping-details">
-						<div class="section-title">
-							<h3 class="title">Shiping address</h3>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="shiping-address">
-							<label for="shiping-address">
-								<span></span>
-								Ship to a diffrent address?
-							</label>
-							<div class="caption">
-								<div class="form-group">
-									<input class="input" type="text" name="first-name" placeholder="First Name">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="last-name" placeholder="Last Name">
-								</div>
-								<div class="form-group">
-									<input class="input" type="email" name="email" placeholder="Email">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="address" placeholder="Address">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="city" placeholder="City">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="country" placeholder="Country">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-								</div>
-								<div class="form-group">
-									<input class="input" type="tel" name="tel" placeholder="Telephone">
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- /Shiping Details -->
-
 					<!-- Order notes -->
 					<div class="order-notes">
-						<textarea class="input" placeholder="Order Notes"></textarea>
+						<textarea name="ordernotes" class="input" placeholder="Order Notes"></textarea>
 					</div>
 					<!-- /Order notes -->
 				</div>
@@ -200,7 +167,7 @@ include "header.php";
 					</div>
 					<div class="payment-method">
 						<div class="input-radio">
-							<input type="radio" name="payment" id="payment-1">
+							<input type="radio" name="payment" id="payment-1" checked>
 							<label for="payment-1">
 								<span></span>
 								Direct Bank Transfer
@@ -231,14 +198,16 @@ include "header.php";
 						</div>
 					</div>
 					<div class="input-checkbox">
-						<input type="checkbox" id="terms">
+						<input type="checkbox" id="terms" required>
 						<label for="terms">
 							<span></span>
 							I've read and accept the <a href="#">terms & conditions</a>
 						</label>
 					</div>
-					<input type="hidden" name="thaotac" value="ok">
-					<a href="<?php echo $url.'&ok'?>" class="primary-btn order-submit">Place order</a>
+					<div class="order-submit" style="width: 100%;">
+						<input class="primary-btn" style="width: 100%;" name="Place_order" type="submit" value="Place order">
+					</div>
+
 				</div>
 				<!-- /Order Details -->
 			</div>

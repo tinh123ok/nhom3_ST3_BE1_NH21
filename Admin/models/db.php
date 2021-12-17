@@ -1,8 +1,4 @@
 <?php
-session_start();
-if(!isset($_SESSION['user'])){
-    header('location:../Project/login.php');
-}
 class Db{
 	public static $connection;
     public function __construct()

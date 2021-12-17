@@ -3,6 +3,7 @@ require "config.php";
 require "models/db.php";
 require "models/product.php";
 $product = new Product;
+$ktranhap = 1;
 if (isset($_POST['submit_product'])) {
     $target_dir;
     $target_file;
@@ -40,31 +41,66 @@ if (isset($_POST['submit_product'])) {
     } else {
         $id = $_POST['id'];
         $name = $_POST['name'];
+        $name = str_replace('/\s+/', ' ', $name);
         $manu_id = $_POST['manu_id'];
         $type_id = $_POST['type_id'];
         $price = $_POST['price'];
         $description = $_POST['description'];
+        $description = str_replace('/\s+/', ' ', $description);
         $feature = $_POST['feature'];
         $image = $product->getProductById($id)[0]['image'];
+        if (!preg_match("/^[a-zA-Z ]*$/", $name) || !preg_match("/^[a-zA-Z ]*$/", $description)) {
+            $ktranhap = 0;
+        }
         if (strlen($_FILES['fileupload']['name']) > 0) {
             $image = $_FILES['fileupload']['name'];
         }
-        $product->edit_product($name, $manu_id, $type_id, $price, $image, $description, $feature, $id);
-        if (!file_exists($target_file) && strlen($_FILES['fileupload']['name']) > 0) {
-            move_uploaded_file($_FILES["fileupload"]["tmp_name"], $target_file);
+        if ($ktranhap == 1) {
+            $product->edit_product($name, $manu_id, $type_id, $price, $image, $description, $feature, $id);
+            if (!file_exists($target_file) && strlen($_FILES['fileupload']['name']) > 0) {
+                move_uploaded_file($_FILES["fileupload"]["tmp_name"], $target_file);
+            }
+            header("location:products.php");
+        } else {
+            echo "Không thể upload dữ liệu do nhập kiểu dữ liệu.<br>";
+            echo '
+                <form action="products.php">
+                    <input type="submit" value="Thoát" >
+                </form>';
         }
-        header("location:products.php");
     }
 }
-if(isset($_POST['submit_prodtypes'])){
+if (isset($_POST['submit_prodtypes'])) {
     $type_id = $_POST['type_id'];
     $type_name = $_POST['type_name'];
-    $product->edit_Protypes($type_id,$type_name);
-    header("location:protypes.php");
+    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+        $ktranhap = 0;
+    }
+    if ($ktranhap == 1) {
+        $product->edit_Protypes($type_id, $type_name);
+        header("location:protypes.php");
+    }else {
+        echo "Không thể upload dữ liệu do nhập kiểu dữ liệu.<br>";
+        echo '
+            <form action="manufacture.php">
+                <input type="submit" value="Thoát" >
+            </form>';
+    }
 }
-if(isset($_POST['submit_manufacture'])){
+if (isset($_POST['submit_manufacture'])) {
     $type_id = $_POST['manu_id'];
     $type_name = $_POST['manu_name'];
-    $product->edit_Manufactures($manu_id,$manu_name);
-    header("location:manufacture.php");
+    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+        $ktranhap = 0;
+    }
+    if ($ktranhap == 1) {
+        $product->edit_Manufactures($manu_id, $manu_name);
+        header("location:manufacture.php");
+    }else {
+        echo "Không thể upload dữ liệu do nhập kiểu dữ liệu.<br>";
+        echo '
+            <form action="manufacture.php">
+                <input type="submit" value="Thoát" >
+            </form>';
+    }
 }

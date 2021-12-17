@@ -6,15 +6,40 @@ $product = new Product;
 
 if (isset($_POST['submit_manufacture'])) {
     $name = $_POST['name'];
-    $product->addManufactures($name);
-    header("location:manufacture.php");
+    $ktranhap =1;
+    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+        $ktranhap = 0;
+    }
+    if ($ktranhap == 1) {
+        $product->addManufactures($name);
+        header("location:manufacture.php");
+    }else {
+        echo "Không thể upload dữ liệu do nhập kiểu dữ liệu.<br>";
+        echo '
+            <form action="manufacture.php">
+                <input type="submit" value="Thoát" >
+            </form>';
+    }
 }
 if (isset($_POST['submit_protypes'])) {
+    $ktranhap = 1;
     $name = $_POST['name'];
-    $product->addProtypes($name);
-    header("location:protypes.php");
+    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+        $ktranhap = 0;
+    }
+    if ($ktranhap == 1) {
+        $product->addProtypes($name);
+        header("location:protypes.php");
+    } else {
+        echo "Không thể upload dữ liệu do nhập kiểu dữ liệu.<br>";
+        echo '
+            <form action="protypes.php">
+                <input type="submit" value="Thoát" >
+            </form>';
+    }
 }
 if (isset($_POST['submit_product'])) {
+    $ktranhap = 1;
     $target_dir;
     $target_file;
     $uploadOk = 1;
@@ -49,21 +74,29 @@ if (isset($_POST['submit_product'])) {
         <input type="submit" value="Thoát" >
     </form>';
     } else {
-        $name = $_POST['name'];
+        $name = trim($_POST['name']);
         $manu_id = $_POST['manu_id'];
         $type_id = $_POST['type_id'];
         $price = $_POST['price'];
         $description = $_POST['description'];
         $feature = $_POST['feature'];
-        $image = $product->getProductById($id)[0]['image'];
-        if (strlen($_FILES['fileupload']['name']) > 0) {
-            $image = $_FILES['fileupload']['name'];
+        $image = $_FILES['fileupload']['name'];
+        if (!preg_match("/^[a-zA-Z0-9 ]*$/", $name) || !preg_match("/^[a-zA-Z0-9 ]*$/", $description)) {
+            $ktranhap = 0;
         }
-        $product->addProduct($name, $manu_id, $type_id, $price, $image, $description, $feature);
-        if (!file_exists($target_file) && strlen($_FILES['fileupload']['name']) > 0) {
-            move_uploaded_file($_FILES["fileupload"]["tmp_name"], $target_file);
+        if ($ktranhap == 1) {
+            $product->addProduct($name, $manu_id, $type_id, $price, $image, $description, $feature);
+            if (!file_exists($target_file) && strlen($_FILES['fileupload']['name']) > 0) {
+                move_uploaded_file($_FILES["fileupload"]["tmp_name"], $target_file);
+            }
+            header("location:products.php");
+        } else {
+            echo "Không thể upload dữ liệu do nhập kiểu dữ liệu.<br>";
+            echo '
+                <form action="products.php">
+                    <input type="submit" value="Thoát" >
+                </form>';
         }
-        header("location:products.php");
     }
 }
 // if (isset($_POST['submit_product'])) {
