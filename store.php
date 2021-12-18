@@ -355,7 +355,7 @@ include "header.php";
 							</div>
 							<div class="product-body">
 								<p class="product-category">Category</p>
-								<h3 class="product-name"><a href="#"><?php echo $value['Name']; ?></a></h3>
+								<h3 class="product-name"><a href="details_product.php?product_id=<?php echo $value['ID']?>"><?php echo $value['Name']; ?></a></h3>
 								<h4 class="product-price"><?php echo number_format($value['price']) ?> <del class="product-old-price"><?php echo number_format($value['price'] + $value['price'] * 0.3) ?></del></h4>
 							</div>
 						</div>

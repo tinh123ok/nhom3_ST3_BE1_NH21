@@ -10,7 +10,9 @@ if (isset($_GET['email'])) {
     header("Refresh:0; $url");
 }
 $addcart_id = isset($_GET['addcart_ma']) ? $_GET['addcart_ma'] : null;
-if (!isset($_SESSION['giohang'])) $_SESSION['giohang'] = [];
+if (!isset($_SESSION['giohang'])) {
+    $_SESSION['giohang'] = [];
+}
 $f0 = 0;
 if (isset($_GET['addcart_ma'])) {
     for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
@@ -51,7 +53,7 @@ function xuatten($s)
 $getallmenu = $product->getAllmenu();
 
 $tap2  = isset($_GET['tap2']) ? $_GET['tap2'] : 0;
-if($tap2>3||$tap2<0){
+if ($tap2 > 3 || $tap2 < 0) {
     $tap2 = 0;
 }
 function classacctive($x, $tap2)
@@ -62,7 +64,7 @@ function classacctive($x, $tap2)
 }
 function sstap2($tap2, $type_id)
 {
-    if ($tap2 ==0 && $type_id>=$tap2 ){
+    if ($tap2 == 0 && $type_id >= $tap2) {
         return true;
     }
     if ($tap2 == 1 && $type_id == $tap2) {
