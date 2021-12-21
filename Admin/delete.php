@@ -17,3 +17,8 @@ if (isset($_GET['type_id'])) {
     $product->delete_protypes($_GET['type_id']);
     header("location:protypes.php");
 }
+if(isset($_GET['bill_id'])){
+    $product->deletebill($_GET['bill_id']);
+    $product->deletedetailsbill($_GET['bill_id']);
+    header('location:bills.php');
+}

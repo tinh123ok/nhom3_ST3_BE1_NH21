@@ -399,7 +399,7 @@ include "header.php";
 									<p class="product-category">Category</p>
 
 									<h3 class="product-name"><a href="details_product.php?product_id=<?php echo $value['ID'] ?>"><?php xuatten($value['Name']) ?></a></h3>
-									<h4 class="product-price"><?php echo number_format($value['price']) ?> <del class="product-old-price">$990.00</del></h4>
+									<h4 class="product-price"><?php echo number_format($value['price']) ?></h4>
 									<div class="product-rating">
 										<i class="fa fa-star"></i>
 										<i class="fa fa-star"></i>

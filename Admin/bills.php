@@ -7,12 +7,12 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1>Manufacture</h1>
+          <h1>Protypes</h1>
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item active">Manufacture</li>
+            <li class="breadcrumb-item active">Protypes</li>
           </ol>
         </div>
       </div>
@@ -25,7 +25,7 @@
     <!-- Default box -->
     <div class="card">
       <div class="card-header">
-        <h3 class="card-title">Manufacture <?php echo sizeof($product->getAllmenu()) ?></h3>
+        <h3 class="card-title">Protypes <?php echo sizeof($product->getAllprotypes()) ?></h3>
 
         <div class="card-tools">
           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -40,38 +40,64 @@
         <table class="table table-striped projects">
           <thead>
             <tr>
-              <th style="width: 20%">
-                ID
+              <th style="width:10%">
+                Bill id
               </th>
-              <th style="width: 50%">
-                Name
+              <th style="width: 10%">
+                Barcode
+              </th>
+              <th>
+                Full name
+              </th>
+              <th>
+                User name
+              </th>
+              <th>
+                Address
+              </th>
+              <th>
+                phone
+              </th>
+              <th>
+                ordernotes
+              </th>
+              <th style="width:20%;text-align: center;">
+                Action
               </th>
 
             </tr>
           </thead>
           <tbody>
             <?php
-            $getAllProducts = $product->getAllmenu();
-            foreach ($getAllProducts as $value) {
+            $allbill = $product->getallbill();
+            foreach ($allbill as $value) {
             ?>
               <tr>
                 <td>
-                  <?php echo $value['manu_id'] ?>
+                  <?php echo $value['bill_id'] ?>
                 </td>
                 <td>
                   <a>
-                    <?php echo $value['manu_name'] ?>
+                    <?php echo $value['Barcode'] ?>
                   </a>
-                  <br />
                 </td>
-
-                <td class="project-actions text-right">
-                  <a class="btn btn-info btn-sm" href="manufacture_edit.php?manu_id=<?php echo $value['manu_id'] ?>">
-                    <i class="fas fa-pencil-alt">
-                    </i>
-                    Edit
-                  </a>
-                  <a class="btn btn-danger btn-sm" href="delete.php?manu_id=<?php echo $value['manu_id'] ?>">
+                <td>
+                  <?php echo $value['fullname'] ?>
+                </td>
+                <td>
+                  <?php echo $value['username'] ?>
+                </td>
+                <td>
+                  <?php echo $value['address'] ?>
+                </td>
+                <td>
+                  <?php echo $value['phone'] ?>
+                </td>
+                <td>
+                  <?php echo $value['ordernotes'] ?>
+                </td>
+                <td style="text-align: center;" class="project-actions">
+                  <a class="btn btn-danger btn-sm" href="delete.php?bill_id=<?php echo $value['bill_id'] ?>">
                     <i class="fas fa-trash">
                     </i>
                     Delete

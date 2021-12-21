@@ -19,7 +19,7 @@ class user extends Db
     function createuser($fullname, $phone, $username, $password)
     {
         $sql = self::$connection->prepare("INSERT INTO `user`(`fullname` , `phone`, `username`, `password`)
-         VALUES (?,?,?)");
+         VALUES (?,?,?,?)");
         $password = md5($password);
         $sql->bind_param("ssss", $fullname, $phone, $username, $password);
         return $sql->execute();
@@ -108,5 +108,14 @@ class user extends Db
         $items = array();
         $items = $sql->get_result()->fetch_all(MYSQLI_ASSOC);
         return $items;  
+    }
+    function deletebill($bill_id){
+        $sql = self::$connection->prepare("DELETE FROM `bill` WHERE `bill_id` = ?;");
+        $sql->bind_param("i", $bill_id);
+        return $sql->execute();
+    }function deletedetailsbill($bill_id){
+        $sql = self::$connection->prepare("DELETE FROM `detailsbill` WHERE `bill_id` = ?;");
+        $sql->bind_param("i", $bill_id);
+        return $sql->execute();
     }
 }

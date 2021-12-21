@@ -227,6 +227,15 @@ function menu_open($sp)
               </ul>
             </li>
             <li class="nav-item">
+              <a href="bills.php" class="nav-link <?php active("manufacture") ?>">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Bill
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
               <a href="../logout.php?admin=1" class="nav-link">
                 <i class="nav-icon far fa-circle text-danger"></i>
                 <p>

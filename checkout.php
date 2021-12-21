@@ -29,7 +29,18 @@ if (isset($_POST['Place_order']) && isset($_SESSION['user'])) {
 	echo '<html><script>alert("Order Success. Orders will be delivered in the next 3-4 days");</script></html>';
 	header("Refresh:0; index.php");
 } else {
-	if (isset($_POST['Place_order'])) {
+	if (isset($_POST['Place_order'])&& !isset($_SESSION['user'])) {
+		$name = $_POST['last-name'] . $_POST['first-name'];
+		$address = $_POST['address'] . "-" . $_POST['city'] . "-" . $_POST['country'] . "-" . "(" . $_POST['zip-code'] . ")";
+		$phone = $_POST['tel'];
+		$ordernotes = $_POST['ordernotes'];
+		$Barcode = $user->random_Barcode($user);
+		$user->createbill($Barcode, $name, "", $address, $phone, $ordernotes);
+		$bill_id = $user->getbill_id($Barcode);
+		for ($i = 0; $i < sizeof($_SESSION['giohang']); $i++) {
+			$user->addbill($bill_id, $_SESSION['giohang'][$i][0], $_SESSION['giohang'][$i][1]);
+		}
+		unset($_SESSION['giohang']);
 		echo '<html><script>alert("Order Success. Orders will be delivered in the next 3-4 days");</script></html>';
 		header("Refresh:0; index.php");
 	}

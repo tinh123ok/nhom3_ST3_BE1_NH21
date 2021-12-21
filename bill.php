@@ -23,6 +23,11 @@ if (isset($_GET['delete'])) {
 		break;
 	}
 }
+if (isset($_GET['deletebill_id'])) {
+	$user->deletebill($_GET['deletebill_id']);
+	$user->deletedetailsbill($_GET['deletebill_id']);
+	header("Refresh:0; $url");
+}
 $array = $product->getAllProducts();
 $getallmenu = $product->getAllmenu();
 
@@ -83,7 +88,7 @@ include "header.php"
 				<div class="col-md-2 col-xs-6">
 					Bill ID
 				</div>
-				<div class="col-md-3 col-xs-6">
+				<div class="col-md-2 col-xs-6">
 					Full Name
 				</div>
 				<div class="col-md-2 col-xs-6">
@@ -92,7 +97,7 @@ include "header.php"
 				<div class="col-md-2 col-xs-6">
 					Phone
 				</div>
-				<div class="col-md-2 col-xs-6">
+				<div class="col-md-3 col-xs-6">
 					Operation
 				</div>
 			</div>
@@ -103,7 +108,7 @@ include "header.php"
 					<div class="col-md-2 col-xs-6 ">
 						<?php echo $value['bill_id'] ?>
 					</div>
-					<div class="col-md-3 col-xs-6 ">
+					<div class="col-md-2 col-xs-6 ">
 						<?php echo $value['fullname'] ?>
 					</div>
 					<div class="col-md-2 col-xs-6 ">
@@ -112,13 +117,16 @@ include "header.php"
 					<div class="col-md-2 col-xs-6">
 						<?php echo $value['phone'] ?>
 					</div>
-					<div style="margin-top: -5px;" class="col-md-2 col-xs-6 tt">
-						<div class="cart-btns1"> <a href="blank.php?bill_id=<?php echo $value['bill_id']?>">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+					<div style="margin-top: -25px;padding-left: 110px;" class="col-md-6 col-xs-6 tt">
+						<div style="margin-right: -50px;" class="col-md-5 cart-btns1"> <a href="blank.php?bill_id=<?php echo $value['bill_id'] ?>">Checkbill <i class="fa fa-arrow-circle-right"></i></a>
+						</div>
+						<div class="col-md-5 cart-btns1"> <a href="bill.php?deletebill_id=<?php echo $value['bill_id'] ?>">Deletebill <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
+
 					<!-- /row -->
 				</div>
-				<?php } ?>
+			<?php } ?>
 		</form>
 	</div>
 	<!-- /container -->

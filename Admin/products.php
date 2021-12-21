@@ -45,17 +45,20 @@
               <th style="width: 20%">
                 Name
               </th>
-              <th style="width: 30%">
+              <th style="width: 10%">
                 Image
               </th>
               <th>
                 Price
               </th>
               <th>
+                Description
+              </th>
+              <th>
                 Manufacture
               </th>
               <th style="width: 8%" class="text-center">
-                Protypr
+                Protype
               </th>
               <th style="width:20%;text-align: center;">
                 Action
@@ -80,8 +83,11 @@
                 <td>
                   <img src="../images/<?php echo $value['image'] ?>" width="100px" alt="">
                 </td>
-                <td class="project_progress">
+                <td>
                   <?php echo $value['price'] ?>
+                </td>
+                <td class="project_progress">
+                  <?php echo substr($value['description'], 0, 200) . "..." ?>
                 </td>
                 <td class="project-state">
                   <?php echo $value['manu_name'] ?>

@@ -55,7 +55,7 @@ function disabled($manu_id)
                 </div>
                 <div class="form-group">
                   <label for="inputName">Manufacture Name</label>
-                  <input name="type_name" type="text" value="<?php echo $product->getprotypebyid($manu_id)[0]['type_name'] ?>" id="inputName" class="form-control">
+                  <input name="manu_name" type="text" value="<?php echo $product->getmanufacturesbyid($manu_id)[0]['manu_name'] ?>" id="inputName" class="form-control">
                 </div>
               <?php } ?>
 

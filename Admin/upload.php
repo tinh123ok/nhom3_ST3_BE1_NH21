@@ -7,7 +7,7 @@ $product = new Product;
 if (isset($_POST['submit_manufacture'])) {
     $name = $_POST['name'];
     $ktranhap =1;
-    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+    if (!preg_match("/^[a-zA-Z0-9 ]*$/", $name)) {
         $ktranhap = 0;
     }
     if ($ktranhap == 1) {
@@ -24,7 +24,7 @@ if (isset($_POST['submit_manufacture'])) {
 if (isset($_POST['submit_protypes'])) {
     $ktranhap = 1;
     $name = $_POST['name'];
-    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+    if (!preg_match("/^[a-zA-Z0-9 ]*$/", $name)) {
         $ktranhap = 0;
     }
     if ($ktranhap == 1) {

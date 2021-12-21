@@ -49,7 +49,7 @@ if (isset($_POST['submit_product'])) {
         $description = str_replace('/\s+/', ' ', $description);
         $feature = $_POST['feature'];
         $image = $product->getProductById($id)[0]['image'];
-        if (!preg_match("/^[a-zA-Z ]*$/", $name) || !preg_match("/^[a-zA-Z ]*$/", $description)) {
+        if (!preg_match("/^[a-zA-Z0-9 ]*$/", $name) || !preg_match("/^[a-zA-Z0-9 ]*$/", $description)) {
             $ktranhap = 0;
         }
         if (strlen($_FILES['fileupload']['name']) > 0) {
@@ -73,7 +73,7 @@ if (isset($_POST['submit_product'])) {
 if (isset($_POST['submit_prodtypes'])) {
     $type_id = $_POST['type_id'];
     $type_name = $_POST['type_name'];
-    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+    if (!preg_match("/^[a-zA-Z0-9 ]*$/", $name)) {
         $ktranhap = 0;
     }
     if ($ktranhap == 1) {
@@ -88,9 +88,9 @@ if (isset($_POST['submit_prodtypes'])) {
     }
 }
 if (isset($_POST['submit_manufacture'])) {
-    $type_id = $_POST['manu_id'];
-    $type_name = $_POST['manu_name'];
-    if (!preg_match("/^[a-zA-Z ]*$/", $name)) {
+    $manu_id = $_POST['manu_id'];
+    $manu_name = $_POST['manu_name'];
+    if (!preg_match("/^[a-zA-Z0-9 ]*$/", $name)) {
         $ktranhap = 0;
     }
     if ($ktranhap == 1) {

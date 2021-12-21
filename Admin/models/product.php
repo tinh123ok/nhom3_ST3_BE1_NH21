@@ -53,7 +53,7 @@ class Product extends Db
         return $items;
     }
     public function getAllprotypes()
-    {   
+    {
         $sql = self::$connection->prepare("SELECT * FROM `protypes`");
         $sql->execute();
         $items = array();
@@ -183,16 +183,36 @@ class Product extends Db
         $item = $sql->execute();
         return $item;
     }
-    function edit_Protypes($type_id,$type_name)
+    function edit_Protypes($type_id, $type_name)
     {
         $sql = self::$connection->prepare("UPDATE `protypes` SET `type_name`= ? WHERE `type_id`= ?");
-        $sql->bind_param("si", $type_name,$type_id);
+        $sql->bind_param("si", $type_name, $type_id);
         return $sql->execute();
     }
-    function edit_Manufactures($manu_id,$manu_name)
+    function edit_Manufactures($manu_id, $manu_name)
     {
         $sql = self::$connection->prepare("UPDATE `manufactures` SET `manu_name`=? WHERE `manu_id`=?");
-        $sql->bind_param("si", $manu_name,$manu_id);
+        $sql->bind_param("si", $manu_name, $manu_id);
+        return $sql->execute();
+    }
+    function getallbill()
+    {
+        $sql = self::$connection->prepare("SELECT * FROM `bill`");
+        $sql->execute();
+        $items = array();
+        $items = $sql->get_result()->fetch_all(MYSQLI_ASSOC);
+        return $items;
+    }
+    function deletebill($bill_id)
+    {
+        $sql = self::$connection->prepare("DELETE FROM `bill` WHERE `bill_id` = ?;");
+        $sql->bind_param("i", $bill_id);
+        return $sql->execute();
+    }
+    function deletedetailsbill($bill_id)
+    {
+        $sql = self::$connection->prepare("DELETE FROM `detailsbill` WHERE `bill_id` = ?;");
+        $sql->bind_param("i", $bill_id);
         return $sql->execute();
     }
 }
